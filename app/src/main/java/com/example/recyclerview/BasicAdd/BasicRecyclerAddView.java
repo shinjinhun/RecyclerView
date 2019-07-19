@@ -21,6 +21,7 @@ public class BasicRecyclerAddView extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
 
     private String[] myDataset = {"a","b","c"};
+    private ArrayList<BasicRecyclerAddData> arrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,40 @@ public class BasicRecyclerAddView extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mrecyclerView.setLayoutManager(mLayoutManager);
 
+        arrayList = new ArrayList<>();
+
+        mAdapter = new BasicRecyclerAddAdapter(arrayList);
+        mrecyclerView.setAdapter(mAdapter);
+
+//        BasicRecyclerAddData basicRecyclerAddData = new BasicRecyclerAddData(R.mipmap.ic_launcher, "신진훈","내용");
+//        arrayList.add(basicRecyclerAddData);
+//
+//        BasicRecyclerAddData basicRecyclerAddData2 = new BasicRecyclerAddData(R.mipmap.ic_launcher, "신진훈","내용");
+//        arrayList.add(basicRecyclerAddData2);
+
+
+        for (int i=0; i < myDataset.length; i++ ) {
+
+            String title_nm  = "홍길동" + myDataset[i];
+            String contents  = myDataset[i] + " 내용 주절주절.....";
+
+            DataAdd(title_nm, contents);
+        }
+
+        DataAdd("신진훈", "ㅎㅎㅎㅎ");
+        DataAdd("신민재", "ㅅㅅㅅㅅ");
+
+        mAdapter.notifyDataSetChanged();    // 새로 고침
+
+
+
+
+
+/*
+
+// 스트링 배열 작업..
+//  private String[] myDataset = {"a","b","c"};
+//  ArrayList 를 이용하여 주석처리함
 
 
         Log.d("jhTest","" + myDataset.length);  // 현재 myDataset 데이터는 3개임
@@ -64,8 +99,15 @@ public class BasicRecyclerAddView extends AppCompatActivity {
 
 
 
+* */
 
 
 
+    }
+
+
+    public void DataAdd(String title_nm, String contents){
+        BasicRecyclerAddData basicRecyclerAddData = new BasicRecyclerAddData(R.mipmap.ic_launcher, title_nm, contents);
+        arrayList.add(basicRecyclerAddData);
     }
 }

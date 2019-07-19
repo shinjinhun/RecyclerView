@@ -11,8 +11,16 @@ import android.widget.TextView;
 import com.example.recyclerview.Basic.BasicRecyclerAdapter;
 import com.example.recyclerview.R;
 
+import java.util.ArrayList;
+
 public class BasicRecyclerAddAdapter extends RecyclerView.Adapter<BasicRecyclerAddAdapter.MyViewHolder> {
     private String[] mDataset;
+
+    private ArrayList<BasicRecyclerAddData> arrayList;
+
+    public BasicRecyclerAddAdapter(ArrayList<BasicRecyclerAddData> arrayList) {
+        this.arrayList = arrayList;
+    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -52,15 +60,23 @@ public class BasicRecyclerAddAdapter extends RecyclerView.Adapter<BasicRecyclerA
     public void onBindViewHolder(BasicRecyclerAddAdapter.MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.TextView_title.setText(mDataset[position]);
 
-        holder.TextView_content.setText("Text Position " + mDataset[position]);
+        //holder.TextView_title.setText(mDataset[position]);
+        //holder.TextView_content.setText("Text Position " + mDataset[position]);
+
+        holder.TextView_title.setText(arrayList.get(position).getTextView_title());
+        holder.TextView_content.setText(arrayList.get(position).getTextView_content());
+        holder.ImageView_title.setImageResource(arrayList.get(position).getImageView_title());
 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+
+
+        // return mDataset.length;   // 배열 사용으로 주석 처리
+
+        return (null != arrayList ? arrayList.size() : 0 );
     }
 }
