@@ -7,9 +7,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.recyclerview.BasicAdd.BasicRecyclerAddAdapter;
 import com.example.recyclerview.BasicAdd.BasicRecyclerAddData;
 import com.example.recyclerview.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -21,6 +31,10 @@ public class VolleyRecyclerView extends AppCompatActivity {
 
     private String[] myDataset = {"a","b","c"};
     private ArrayList<VolleyRecyclerData> arrayList;
+
+    private String URL  = "https://newsapi.org/v2/top-headlines?country=kr&apiKey=09b06228654e4e9e94bf43b2712b92b4";
+
+    private RequestQueue queue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +76,9 @@ public class VolleyRecyclerView extends AppCompatActivity {
 
         mAdapter.notifyDataSetChanged();    // 새로 고침
 
+        queue = Volley.newRequestQueue(this);
+        //getNews();
+
         mrecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -72,7 +89,8 @@ public class VolleyRecyclerView extends AppCompatActivity {
                 if (lastVisibleItemPosition == itemTotalCount) {
                     Log.d("jhTest", "last Position...");
 
-                    DataAdd("신진훈" + itemTotalCount, "ㅎㅎㅎㅎ");
+                    // DataAdd("신진훈" + itemTotalCount, "ㅎㅎㅎㅎ");
+                    getNews();
                     mAdapter.notifyDataSetChanged();    // 새로 고침
                 }
             }
@@ -124,8 +142,54 @@ public class VolleyRecyclerView extends AppCompatActivity {
         arrayList.add(VolleyRecyclerData);
     }
 
+    public void getNews(){
+        // Instantiate the RequestQueue.
 
+        Log.d("jhTest","getNews() 호출 " + URL);
 
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("jhTest",response);
 
+                        try {
 
+                            Log.d("jhTest","getNews() 호출실행");
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            JSONArray jCnt = jsonObject.getJSONArray("articles");
+
+                            Log.d("jhTest","Array Cnt=" + jCnt.length());
+
+                            for (int i=0; i < jCnt.length(); i++ ) {
+
+                                String title_nm  = jCnt.getJSONObject(i).getString("author");
+                                String contents  = jCnt.getJSONObject(i).getString("title");
+
+                                Log.d("jhTest","title_nm=" + title_nm );
+                                Log.d("jhTest","contents=" + contents);
+
+                                DataAdd(title_nm, contents);
+
+                                // mAdapter.notifyDataSetChanged();    // 새로 고침
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+        mAdapter.notifyDataSetChanged();    // 새로 고침
+    }
 }
