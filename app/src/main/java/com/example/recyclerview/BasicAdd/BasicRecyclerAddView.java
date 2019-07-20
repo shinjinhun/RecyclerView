@@ -1,5 +1,6 @@
 package com.example.recyclerview.BasicAdd;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,7 +64,21 @@ public class BasicRecyclerAddView extends AppCompatActivity {
 
         mAdapter.notifyDataSetChanged();    // 새로 고침
 
+        mrecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
+                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
+                if (lastVisibleItemPosition == itemTotalCount) {
+                    Log.d("jhTest", "last Position...");
+
+                    DataAdd("신진훈" + itemTotalCount, "ㅎㅎㅎㅎ");
+                    mAdapter.notifyDataSetChanged();    // 새로 고침
+                }
+            }
+        });
 
 
 
@@ -110,4 +125,9 @@ public class BasicRecyclerAddView extends AppCompatActivity {
         BasicRecyclerAddData basicRecyclerAddData = new BasicRecyclerAddData(R.mipmap.ic_launcher, title_nm, contents);
         arrayList.add(basicRecyclerAddData);
     }
+
+
+
+
+
 }

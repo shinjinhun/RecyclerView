@@ -79,4 +79,6 @@ public class BasicRecyclerAddAdapter extends RecyclerView.Adapter<BasicRecyclerA
 
         return (null != arrayList ? arrayList.size() : 0 );
     }
+
+
 }
