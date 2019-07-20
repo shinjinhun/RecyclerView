@@ -8,10 +8,11 @@ import android.widget.Button;
 
 import com.example.recyclerview.Basic.BasicRecyclerView;
 import com.example.recyclerview.BasicAdd.BasicRecyclerAddView;
+import com.example.recyclerview.Volley.VolleyRecyclerView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button mBtn_basic, mBtn_basicAdd;
+    Button mBtn_basic, mBtn_basicAdd, mBtn_volley;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBtn_basic      = findViewById(R.id.btn_basic);
         mBtn_basicAdd   = findViewById(R.id.btn_basicAdd);
+        mBtn_volley     = findViewById(R.id.btn_volley);
 
 
         mBtn_basic.setOnClickListener(new View.OnClickListener() {
@@ -34,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, BasicRecyclerAddView.class);
+                startActivity(intent);
+            }
+        });
+
+        mBtn_volley.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, VolleyRecyclerView.class);
                 startActivity(intent);
             }
         });

@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".BasicAdd.BasicRecyclerAddView"></activity>
         <activity android:name=".Basic.BasicRecyclerView" />
+        <activity android:name=".Volley.VolleyRecyclerView" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
