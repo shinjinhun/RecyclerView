@@ -1,4 +1,4 @@
-package com.example.recyclerview.Volley;
+package com.example.recyclerview.VolleyAdd;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,34 +7,41 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.recyclerview.BasicAdd.BasicRecyclerAddAdapter;
-import com.example.recyclerview.BasicAdd.BasicRecyclerAddData;
 import com.example.recyclerview.R;
+import com.example.recyclerview.VolleyAdd.VolleyRecyclerAddAdapter;
+import com.example.recyclerview.VolleyAdd.VolleyRecyclerAddData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class VolleyRecyclerView extends AppCompatActivity {
+public class VolleyRecyclerAddView extends AppCompatActivity {
 
     private RecyclerView mrecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     private String[] myDataset = {"a","b","c"};
-    private ArrayList<VolleyRecyclerData> arrayList;
+    private ArrayList<VolleyRecyclerAddData> arrayList;
 
-    private String URL  = "https://newsapi.org/v2/top-headlines?country=kr&apiKey=09b06228654e4e9e94bf43b2712b92b4";
+    //private String URL  = "https://newsapi.org/v2/top-headlines?country=kr&apiKey=09b06228654e4e9e94bf43b2712b92b4";
+    private String URL  = "http://mdoli.dothome.co.kr/goodword/goodlist_json_data.php";
 
     private RequestQueue queue;
+
+    private int pageNum = 1;
+    private int pageRowCount = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,30 +60,23 @@ public class VolleyRecyclerView extends AppCompatActivity {
 
         arrayList = new ArrayList<>();
 
-        mAdapter = new VolleyRecyclerAdapter(arrayList);
+        mAdapter = new VolleyRecyclerAddAdapter(arrayList);
         mrecyclerView.setAdapter(mAdapter);
 
-//        VolleyRecyclerData VolleyRecyclerData = new VolleyRecyclerData(R.mipmap.ic_launcher, "신진훈","내용");
-//        arrayList.add(VolleyRecyclerData);
+//        for (int i=0; i < myDataset.length; i++ ) {
 //
-//        VolleyRecyclerData VolleyRecyclerData2 = new VolleyRecyclerData(R.mipmap.ic_launcher, "신진훈","내용");
-//        arrayList.add(VolleyRecyclerData2);
-
-
-        for (int i=0; i < myDataset.length; i++ ) {
-
-            String title_nm  = "홍길동" + myDataset[i];
-            String contents  = myDataset[i] + " 내용 주절주절.....";
-
-            DataAdd(title_nm, contents);
-        }
-
-        DataAdd("신진훈", "ㅎㅎㅎㅎ");
-        DataAdd("신민재", "ㅅㅅㅅㅅ");
-
-        mAdapter.notifyDataSetChanged();    // 새로 고침
+//            String title_nm  = "슈퍼맨" + myDataset[i];
+//            String contents  = myDataset[i] + " 내용 주절주절.....";
+//
+//            DataAdd(title_nm, contents);
+//        }
+//
+//        mAdapter.notifyDataSetChanged();    // 새로 고침
 
         queue = Volley.newRequestQueue(this);
+
+        getNews();
+
 
         mrecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -86,68 +86,31 @@ public class VolleyRecyclerView extends AppCompatActivity {
                 int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
                 int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
                 if (lastVisibleItemPosition == itemTotalCount) {
+
+                    pageNum++;
+
                     Log.d("jhTest", "last Position...");
 
                     // DataAdd("신진훈" + itemTotalCount, "ㅎㅎㅎㅎ");
+                    //
                     getNews();
                     //  mAdapter.notifyDataSetChanged();    // 새로 고침
                 }
             }
         });
-
-
-
-/*
-
-// 스트링 배열 작업..
-//  private String[] myDataset = {"a","b","c"};
-//  ArrayList 를 이용하여 주석처리함
-
-
-        Log.d("jhTest","" + myDataset.length);  // 현재 myDataset 데이터는 3개임
-
-        ArrayList<String> arrData = new ArrayList<String>();    // Array 배열로 바꾸고
-        Collections.addAll(arrData, myDataset);
-
-        arrData.add("d");           // 데이터 추가
-        arrData.add("e");           // 데이터 추가
-
-        Log.d("jhTest","" + arrData.size());        // arrData.size() 는 5개가 됨
-
-        for(int i=0; i< arrData.size(); i++){
-            Log.d("jhTest","data = " + arrData.get(i));
-        }
-
-
-        // ArrayList, List => String[] 로 변환
-        String[] strData = arrData.toArray(new String[arrData.size()]);
-
-        // specify an adapter (see also next example)
-//        mAdapter = new VolleyRecyclerAdapter(myDataset);
-        mAdapter = new VolleyRecyclerAdapter(strData);
-        mrecyclerView.setAdapter(mAdapter);     // 5개가 출력됨
-
-
-
-* */
-
-
-
     }
 
 
     public void DataAdd(String title_nm, String contents){
-        VolleyRecyclerData VolleyRecyclerData = new VolleyRecyclerData(R.mipmap.ic_launcher, title_nm, contents);
+        VolleyRecyclerAddData VolleyRecyclerData = new VolleyRecyclerAddData(R.mipmap.ic_launcher, title_nm, contents);
         arrayList.add(VolleyRecyclerData);
     }
 
     public void getNews(){
         // Instantiate the RequestQueue.
-
-        //  Log.d("jhTest","getNews() 호출 " + URL);
-
+        Log.d("jhTest","getNews() 호출 " + URL);
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -159,14 +122,15 @@ public class VolleyRecyclerView extends AppCompatActivity {
 
                             JSONObject jsonObject = new JSONObject(response);
 
-                            JSONArray jCnt = jsonObject.getJSONArray("articles");
+                            //JSONArray jCnt = jsonObject.getJSONArray("articles");
+                            JSONArray jCnt = jsonObject.getJSONObject("body").getJSONArray("list");
 
                             //  Log.d("jhTest","Array Cnt=" + jCnt.length());
 
                             for (int i=0; i < jCnt.length(); i++ ) {
 
-                                String title_nm  = jCnt.getJSONObject(i).getString("author");
-                                String contents  = jCnt.getJSONObject(i).getString("title");
+                                String title_nm  = jCnt.getJSONObject(i).getString("answer");
+                                String contents  = jCnt.getJSONObject(i).getString("contents");
 
                                 //  Log.d("jhTest","title_nm=" + title_nm );
                                 //  Log.d("jhTest","contents=" + contents);
@@ -184,7 +148,16 @@ public class VolleyRecyclerView extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("pageNum", String.valueOf(pageNum));
+                params.put("pageRowCount", String.valueOf(pageRowCount));
+                return params;
+            }
+        };
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
