@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
@@ -32,31 +33,25 @@ public class VolleyRecyclerAddView extends AppCompatActivity {
     private RecyclerView mrecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    private String[] myDataset = {"a","b","c"};
     private ArrayList<VolleyRecyclerAddData> arrayList;
-
-    //private String URL  = "https://newsapi.org/v2/top-headlines?country=kr&apiKey=09b06228654e4e9e94bf43b2712b92b4";
     private String URL  = "http://mdoli.dothome.co.kr/goodword/goodlist_json_data.php";
 
     private RequestQueue queue;
 
     private int pageNum = 1;
-    private int pageRowCount = 10;
+    private int pageRowCount = 30;
 
     ProgressBar progressBar;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.basic_recycler_add_view);
+        setContentView(R.layout.volley_recycler_add_view);
 
         mrecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
+        progressBar = findViewById(R.id.progressBar);
+
         mrecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
@@ -67,16 +62,6 @@ public class VolleyRecyclerAddView extends AppCompatActivity {
 
         mAdapter = new VolleyRecyclerAddAdapter(arrayList);
         mrecyclerView.setAdapter(mAdapter);
-
-//        for (int i=0; i < myDataset.length; i++ ) {
-//
-//            String title_nm  = "슈퍼맨" + myDataset[i];
-//            String contents  = myDataset[i] + " 내용 주절주절.....";
-//
-//            DataAdd(title_nm, contents);
-//        }
-//
-//        mAdapter.notifyDataSetChanged();    // 새로 고침
 
         queue = Volley.newRequestQueue(this);
 
@@ -93,13 +78,9 @@ public class VolleyRecyclerAddView extends AppCompatActivity {
                 if (lastVisibleItemPosition == itemTotalCount) {
 
                     pageNum++;
-
+                    //progressBar.setVisibility(View.VISIBLE);
                     Log.d("jhTest", "last Position...");
-
-                    // DataAdd("신진훈" + itemTotalCount, "ㅎㅎㅎㅎ");
-                    //
                     getNews();
-                    //  mAdapter.notifyDataSetChanged();    // 새로 고침
                 }
             }
         });
@@ -113,7 +94,7 @@ public class VolleyRecyclerAddView extends AppCompatActivity {
 
     public void getNews(){
         // Instantiate the RequestQueue.
-        Log.d("jhTest","getNews() 호출 " + URL);
+        Log.d("jhTest","getNews() 호출 " + URL + "?pageNum=" + pageNum + "&pageRowCount=" + pageRowCount);
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
                 new Response.Listener<String>() {
@@ -142,7 +123,9 @@ public class VolleyRecyclerAddView extends AppCompatActivity {
 
                                 DataAdd(title_nm, contents);    // 데이타 추가
                             }
+
                             mAdapter.notifyDataSetChanged();    // 새로 고침
+                            progressBar.setVisibility(View.GONE);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -164,8 +147,8 @@ public class VolleyRecyclerAddView extends AppCompatActivity {
             }
         };
 
-        // Add the request to the RequestQueue.
         queue.add(stringRequest);
+        progressBar.setVisibility(View.GONE);
         //mAdapter.notifyDataSetChanged();    // 여기서 새로 고침 하면 안됨
     }
 }

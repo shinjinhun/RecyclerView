@@ -43,6 +43,7 @@
         android:paddingLeft="6dp"
         android:paddingRight="6dp"
         android:ellipsize="end"
+        android:maxLines="3"
         />
 
 </LinearLayout>
