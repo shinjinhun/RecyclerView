@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,6 +41,7 @@ public class VolleyRecyclerAddView extends AppCompatActivity {
 
     private int pageNum = 1;
     private int pageRowCount = 30;
+    private int pageNumTotal = 0;
 
     ProgressBar progressBar;
 
@@ -80,7 +82,14 @@ public class VolleyRecyclerAddView extends AppCompatActivity {
                     pageNum++;
                     //progressBar.setVisibility(View.VISIBLE);
                     Log.d("jhTest", "last Position...");
-                    getNews();
+                    Log.d("jhTest", "pageNumTotal=" + pageNumTotal);
+                    Log.d("jhTest", "pageNum=" + pageNum);
+
+                    if (pageNum <= pageNumTotal) {
+                        getNews();
+                    } else {
+                        Toast.makeText(getBaseContext(),"마지막 페이지 입니다.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -109,13 +118,17 @@ public class VolleyRecyclerAddView extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
 
                             //JSONArray jCnt = jsonObject.getJSONArray("articles");
+
+                            pageNumTotal = Integer.parseInt(jsonObject.getJSONObject("body").getJSONObject("page").getString("pageNumTotal"));
+
                             JSONArray jCnt = jsonObject.getJSONObject("body").getJSONArray("list");
 
                             //  Log.d("jhTest","Array Cnt=" + jCnt.length());
 
                             for (int i=0; i < jCnt.length(); i++ ) {
 
-                                String title_nm  = jCnt.getJSONObject(i).getString("answer");
+                                int count  = jCnt.getJSONObject(i).getInt("count");
+                                String title_nm  = count + "." + jCnt.getJSONObject(i).getString("answer");
                                 String contents  = jCnt.getJSONObject(i).getString("contents");
 
                                 //  Log.d("jhTest","title_nm=" + title_nm );
