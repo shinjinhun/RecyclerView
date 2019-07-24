@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/btn_basic"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="1. 리사이클뷰 기본"
         android:textStyle="bold"
@@ -17,7 +17,7 @@
 
     <Button
         android:id="@+id/btn_basicAdd"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="2. 리사이클뷰 기본 추가"
         android:textStyle="bold"
@@ -25,7 +25,7 @@
 
     <Button
         android:id="@+id/btn_volley"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="3. Volley 리사이클뷰 기본"
         android:textStyle="bold"
@@ -34,9 +34,17 @@
 
     <Button
         android:id="@+id/btn_volleyAdd"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="4. Volley 리사이클뷰 기본 추가"
+        android:textStyle="bold"
+        />
+
+    <Button
+        android:id="@+id/btn_retrofit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="5. retrofit"
         android:textStyle="bold"
         />
 

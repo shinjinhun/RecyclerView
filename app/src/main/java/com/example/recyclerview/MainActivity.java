@@ -8,12 +8,13 @@ import android.widget.Button;
 
 import com.example.recyclerview.Basic.BasicRecyclerView;
 import com.example.recyclerview.BasicAdd.BasicRecyclerAddView;
+import com.example.recyclerview.Retrofit.RetrofitView;
 import com.example.recyclerview.Volley.VolleyRecyclerView;
 import com.example.recyclerview.VolleyAdd.VolleyRecyclerAddView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button mBtn_basic, mBtn_basicAdd, mBtn_volley, mBtn_volleyAdd;
+    Button mBtn_basic, mBtn_basicAdd, mBtn_volley, mBtn_volleyAdd, mBtn_retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         mBtn_basicAdd   = findViewById(R.id.btn_basicAdd);
         mBtn_volley     = findViewById(R.id.btn_volley);
         mBtn_volleyAdd     = findViewById(R.id.btn_volleyAdd);
+        mBtn_retrofit     = findViewById(R.id.btn_retrofit);
 
 
         mBtn_basic.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, VolleyRecyclerAddView.class);
+                startActivity(intent);
+            }
+        });
+
+        mBtn_retrofit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RetrofitView.class);
                 startActivity(intent);
             }
         });
